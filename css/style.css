@@ -40,27 +40,29 @@ nav {
   justify-content: space-between;
 }
 .nav-logo {
-  font-family: 'Playfair Display', serif;
-  font-size: 22px;
-  color: var(--brown);
+  font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  font-size: 20px;
+  color: #C4622D;
   text-decoration: none;
   display: flex;
   flex-direction: column;
   gap: 3px;
+  align-items: center;
 }
-.nav-logo-main { display: block; line-height: 1; }
-.nav-logo-amp { color: var(--terra); }
-.nav-logo span { color: var(--terra); }
+.nav-logo-main { display: block; line-height: 1; color: #C4622D; }
+.nav-logo-amp { color: #C4622D; }
+.nav-logo span { color: #C4622D; }
 .nav-logo-by {
   display: block;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 15px;
+  font-family: 'DM Sans', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 12px;
   font-style: italic;
-  color: var(--terra);
+  color: #C4622D;
   font-weight: 400;
   letter-spacing: 0.02em;
   line-height: 1;
   text-align: center;
+  width: 100%;
 }
 .nav-links {
   display: flex;
