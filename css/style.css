@@ -46,17 +46,21 @@ nav {
   text-decoration: none;
   display: flex;
   flex-direction: column;
-  line-height: 1.1;
+  gap: 3px;
 }
+.nav-logo-main { display: block; line-height: 1; }
+.nav-logo-amp { color: var(--terra); }
 .nav-logo span { color: var(--terra); }
 .nav-logo-by {
+  display: block;
   font-family: 'DM Sans', sans-serif;
-  font-size: 10px;
+  font-size: 15px;
   font-style: italic;
-  color: var(--muted);
+  color: var(--terra);
   font-weight: 400;
   letter-spacing: 0.02em;
-  margin-top: 6px;
+  line-height: 1;
+  text-align: center;
 }
 .nav-links {
   display: flex;
