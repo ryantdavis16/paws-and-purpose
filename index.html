@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paws & Purpose | Animal Shelter Non-Profit</title>
+<meta name="description" content="Paws & Purpose — donating pet supplies to local animal shelters, one donation at a time.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Paws <span>&</span> Purpose</div>
+  <button class="nav-toggle" onclick="toggleMenu()" aria-label="Menu">☰</button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#mission">Mission</a></li>
+    <li><a href="#donations">Donations</a></li>
+    <li><a href="#volunteer">Volunteer</a></li>
+    <li><a href="#fosters">Fosters</a></li>
+    <li><a href="#sponsors">Sponsors</a></li>
+    <li><a href="tracker.html" class="nav-cta">Tracker →</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="paw-bg">🐾</div>
+  <div class="hero-content">
+    <div class="hero-badge">🐾 Animal Welfare Non-Profit</div>
+    <h1 class="hero-title">Every shelter<br>animal deserves<br><em>a little more.</em></h1>
+    <p class="hero-sub">We collect and donate pet supplies to local animal shelters — because love isn't the only thing these animals need. Food, bedding, toys, and care make a real difference.</p>
+    <div class="hero-actions">
+      <a href="#donations" class="btn-primary">See Our Impact</a>
+      <a href="#sponsors" class="btn-outline">Become a Sponsor</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-num" id="stat-donations" data-target="0">0</div>
+    <div class="stat-label">Donations Made</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num" id="stat-hours" data-target="0">0</div>
+    <div class="stat-label">Volunteer Hours</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num" id="stat-shelters" data-target="0">0</div>
+    <div class="stat-label">Shelters Supported</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num" id="stat-sponsors" data-target="0">0</div>
+    <div class="stat-label">Sponsors</div>
+  </div>
+</div>
+
+<!-- MISSION -->
+<section class="mission" id="mission">
+  <div class="mission-text">
+    <p class="section-label">Our Mission</p>
+    <h2 class="section-title">Bridging the gap between shelters &amp; supplies</h2>
+    <p class="section-sub">Animal shelters do incredible work — but they're often underfunded and under-supplied. Paws &amp; Purpose was born from a simple belief: we can help fill those gaps, one donation at a time.</p>
+    <a href="#donations" class="btn-primary">View Donation History</a>
+  </div>
+  <div class="mission-cards">
+    <div class="mission-card">
+      <div class="mission-icon">🛍️</div>
+      <h3>Supply Drives</h3>
+      <p>We organize regular donation drives collecting food, bedding, toys, and medical supplies for shelters in need.</p>
+    </div>
+    <div class="mission-card">
+      <div class="mission-icon">🏠</div>
+      <h3>Foster Care</h3>
+      <p>We foster animals in need — from bunnies to kittens — giving them a safe, loving home until adoption.</p>
+    </div>
+    <div class="mission-card">
+      <div class="mission-icon">🤝</div>
+      <h3>Volunteering</h3>
+      <p>Regular hands-on shelter volunteering — walking dogs, socializing cats, and supporting shelter staff.</p>
+    </div>
+    <div class="mission-card">
+      <div class="mission-icon">📣</div>
+      <h3>Awareness</h3>
+      <p>Shining a light on local shelters and the animals in their care, helping them find forever homes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DONATIONS -->
+<section class="donations-section" id="donations">
+  <p class="section-label">Donation History</p>
+  <h2 class="section-title">What we've given</h2>
+  <p class="section-sub">A running record of every donation we've made to shelters in our area — updated live from our tracker.</p>
+  <div class="donations-grid" id="donations-grid">
+    <div class="loading-msg">Loading donation records...</div>
+  </div>
+  <div class="see-more" id="see-more-wrap" style="display:none">
+    <button class="btn-outline" onclick="showAllDonations()">View All Donations</button>
+  </div>
+</section>
+
+<!-- VOLUNTEER -->
+<section class="volunteer-section" id="volunteer">
+  <div class="vol-grid">
+    <div class="vol-left">
+      <p class="section-label">Volunteer Hours</p>
+      <h2 class="section-title">Time is the greatest gift</h2>
+      <p class="section-sub">Beyond supplies, showing up in person matters. Every hour spent at the shelter is an hour an animal feels seen, loved, and cared for.</p>
+      <div class="vol-stats">
+        <div class="vol-stat">
+          <div class="vol-stat-num" id="vol-total" data-target="0">0</div>
+          <div class="vol-stat-label">Total Hours</div>
+        </div>
+        <div class="vol-stat">
+          <div class="vol-stat-num" id="vol-sessions" data-target="0">0</div>
+          <div class="vol-stat-label">Sessions</div>
+        </div>
+        <div class="vol-stat">
+          <div class="vol-stat-num" id="vol-avg" data-target="0">0</div>
+          <div class="vol-stat-label">Avg Hrs/Session</div>
+        </div>
+        <div class="vol-stat">
+          <div class="vol-stat-num" id="vol-month" data-target="0">0</div>
+          <div class="vol-stat-label">Hours This Month</div>
+        </div>
+      </div>
+    </div>
+    <div class="vol-right">
+      <div class="vol-log" id="vol-log">
+        <div style="color:rgba(255,255,255,0.4);font-size:14px;padding:20px 0">Loading volunteer log...</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOSTERS -->
+<section class="fosters-section" id="fosters">
+  <p class="section-label">Foster Animals</p>
+  <h2 class="section-title">Our temporary family</h2>
+  <p class="section-sub">These wonderful creatures have stayed with us on their journey to a forever home. Each one has stolen a piece of our hearts.</p>
+  <div class="fosters-grid" id="fosters-grid">
+    <div class="loading-msg">Loading foster animals...</div>
+  </div>
+</section>
+
+<!-- SPONSORS -->
+<section class="sponsors-section" id="sponsors">
+  <p class="section-label">Our Sponsors</p>
+  <h2 class="section-title">Thank you, champions</h2>
+  <p class="section-sub">These generous businesses and individuals make our work possible. Their support directly funds shelter donations and supplies.</p>
+  <div class="sponsors-grid" id="sponsors-grid">
+    <div class="loading-msg">Loading sponsors...</div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Paws <span>&</span> Purpose</div>
+  <div class="footer-tagline">Making a difference, one donation at a time. 🐾</div>
+  <div class="footer-copy">© 2025 Paws &amp; Purpose Non-Profit</div>
+</footer>
+
+<script src="js/storage.js"></script>
+<script src="js/website.js"></script>
+</body>
+</html>
