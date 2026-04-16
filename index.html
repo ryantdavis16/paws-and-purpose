@@ -12,7 +12,7 @@
 <body>
 
 <nav>
-  <div class="nav-logo">Paws <span>&</span> Purpose</div>
+  <div class="nav-logo">Paws <span>&</span> Purpose<span class="nav-logo-by">by Addy Davis</span></div>
   <button class="nav-toggle" onclick="toggleMenu()" aria-label="Menu">☰</button>
   <ul class="nav-links" id="nav-links">
     <li><a href="#mission">Mission</a></li>
@@ -20,6 +20,8 @@
     <li><a href="#volunteer">Volunteer</a></li>
     <li><a href="#fosters">Fosters</a></li>
     <li><a href="#sponsors">Sponsors</a></li>
+    <li><a href="#leadership">Leadership</a></li>
+    <li><a href="#contact">Contact</a></li>
     <li><a href="tracker.html" class="nav-cta">Tracker →</a></li>
   </ul>
 </nav>
@@ -158,13 +160,135 @@
   </div>
 </section>
 
+<!-- LEADERSHIP TEAM -->
+<section class="leadership-section" id="leadership">
+  <p class="section-label">Leadership Team</p>
+  <h2 class="section-title">The heart behind the mission</h2>
+  <p class="section-sub">Meet the passionate young leader who started it all — driven by love for animals and a belief that one person really can make a difference.</p>
+
+  <div class="leader-card">
+    <div class="leader-photo-col">
+      <div class="leader-photo-main">
+        <img src="images/addy-main.jpg" alt="Addy Davis with alpacas" />
+      </div>
+      <div class="leader-photo-row">
+        <div class="leader-photo-sm">
+          <img src="images/addy-bunny.png" alt="Addy fostering a rabbit at Marin Humane" />
+        </div>
+        <div class="leader-photo-sm">
+          <img src="images/addy-dog.png" alt="Addy cuddling a puppy" />
+        </div>
+      </div>
+    </div>
+
+    <div class="leader-bio">
+      <div class="leader-name-block">
+        <h3 class="leader-name">Addy Davis</h3>
+        <span class="leader-title-badge">Founder &amp; Executive Director</span>
+      </div>
+
+      <p class="leader-desc">Addy is a middle school student with a heart as big as her ambitions. From fostering rabbits at the local humane society to organizing supply drives for animal shelters, she has turned her love for animals into real, tangible change in her community.</p>
+
+      <p class="leader-desc">An aspiring veterinarian, Addy believes that every animal deserves to feel safe, loved, and cared for — and she's not waiting until she grows up to do something about it. Whether she's volunteering at the shelter on weekends, tending to a foster bunny at home, or fundraising for supplies, Addy shows up with energy, compassion, and purpose.</p>
+
+      <p class="leader-desc">Beyond her passion for animals, Addy loves the outdoors and believes strongly in giving back to her local community and making an impact that ripples far beyond her own backyard.</p>
+
+      <div class="leader-tags">
+        <span class="leader-tag">🐾 Animal Advocate</span>
+        <span class="leader-tag">🩺 Future Veterinarian</span>
+        <span class="leader-tag">🌲 Outdoor Enthusiast</span>
+        <span class="leader-tag">🐰 Foster Parent</span>
+        <span class="leader-tag">💛 Community Leader</span>
+      </div>
+
+      <blockquote class="leader-quote">
+        "Every animal deserves someone in their corner. I want to be that someone."
+        <cite>— Addy Davis</cite>
+      </blockquote>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="contact-inner">
+    <div class="contact-left">
+      <p class="section-label" style="color:var(--gold)">Contact Us</p>
+      <h2 class="section-title" style="color:white">Get in touch</h2>
+      <p class="section-sub" style="color:rgba(255,255,255,0.65);max-width:420px">Whether you want to donate supplies, become a sponsor, inquire about volunteering, or just say hello — Addy would love to hear from you.</p>
+      <div class="contact-ways">
+        <div class="contact-way">
+          <div class="contact-way-icon">📧</div>
+          <div>
+            <div class="contact-way-label">Email Addy directly</div>
+            <a href="mailto:palidog30@gmail.com" class="contact-email">palidog30@gmail.com</a>
+          </div>
+        </div>
+        <div class="contact-way">
+          <div class="contact-way-icon">🐾</div>
+          <div>
+            <div class="contact-way-label">What we'd love to hear about</div>
+            <div class="contact-way-text">Supply donations · Sponsorships · Volunteering · Partnerships · General encouragement 💛</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="contact-right">
+      <div class="contact-form-card">
+        <h3 class="contact-form-title">Send a message</h3>
+        <div class="contact-field">
+          <label>Your Name</label>
+          <input type="text" id="c-name" placeholder="e.g. Jane Smith" />
+        </div>
+        <div class="contact-field">
+          <label>Your Email</label>
+          <input type="email" id="c-email" placeholder="you@example.com" />
+        </div>
+        <div class="contact-field">
+          <label>Subject</label>
+          <select id="c-subject">
+            <option>I'd like to donate supplies</option>
+            <option>I'm interested in sponsoring</option>
+            <option>I'd like to volunteer</option>
+            <option>General inquiry</option>
+            <option>Just saying hi! 👋</option>
+          </select>
+        </div>
+        <div class="contact-field">
+          <label>Message</label>
+          <textarea id="c-message" placeholder="Tell Addy what's on your mind..."></textarea>
+        </div>
+        <button class="btn-primary contact-send" onclick="sendMessage()">Send Message 🐾</button>
+        <div class="contact-confirm" id="contact-confirm">✅ Thanks! Your message will be sent to Addy — she'll get back to you soon.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <footer>
   <div class="footer-logo">Paws <span>&</span> Purpose</div>
-  <div class="footer-tagline">Making a difference, one donation at a time. 🐾</div>
+  <div class="footer-tagline">Made with ❤️ for animals everywhere by Addy Davis using Anthropic AI 🐾</div>
   <div class="footer-copy">© 2025 Paws &amp; Purpose Non-Profit</div>
 </footer>
 
 <script src="js/storage.js"></script>
 <script src="js/website.js"></script>
+<script>
+function sendMessage() {
+  const name = document.getElementById('c-name').value.trim();
+  const email = document.getElementById('c-email').value.trim();
+  const subject = document.getElementById('c-subject').value;
+  const message = document.getElementById('c-message').value.trim();
+  if (!name || !email || !message) { alert('Please fill in your name, email, and message.'); return; }
+  const mailto = 'mailto:palidog30@gmail.com'
+    + '?subject=' + encodeURIComponent('[Paws & Purpose] ' + subject)
+    + '&body=' + encodeURIComponent('From: ' + name + ' (' + email + ')\n\n' + message);
+  window.location.href = mailto;
+  document.getElementById('contact-confirm').style.display = 'block';
+  document.getElementById('c-name').value = '';
+  document.getElementById('c-email').value = '';
+  document.getElementById('c-message').value = '';
+}
+</script>
 </body>
 </html>
