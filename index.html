@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paws & Purpose | Animal Shelter Non-Profit</title>
+<meta name="description" content="Paws & Purpose — donating pet supplies to local animal shelters, one donation at a time.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=4">
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">
+    <span class="nav-logo-main"><span style="color:#3D2B1F">Paws </span><span style="color:#C4622D">&</span><span style="color:#3D2B1F"> Purpose</span></span>
+    <span class="nav-logo-by" style="color:#C4622D;font-style:italic;text-align:center;display:block">by Addy Davis</span>
+  </div>
+  <button class="nav-toggle" onclick="toggleMenu()" aria-label="Menu">☰</button>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#mission">Mission</a></li>
+    <li><a href="#donations">Donations</a></li>
+    <li><a href="#volunteer">Volunteer</a></li>
+    <li><a href="#fosters">Fosters</a></li>
+    <li><a href="#sponsors">Sponsors</a></li>
+    <li><a href="#leadership">Leadership</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="tracker.html" class="nav-cta">Tracker →</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="paw-bg">🐾</div>
+  <div class="hero-content">
+    <div class="hero-badge">🐾 Animal Welfare Non-Profit</div>
+    <h1 class="hero-title">Every shelter<br>animal deserves<br><em>a little more.</em></h1>
+    <p class="hero-sub">We collect and donate pet supplies to local animal shelters — because love isn't the only thing these animals need. Food, bedding, toys, and care make a real difference.</p>
+    <div class="hero-actions">
+      <a href="#donations" class="btn-primary">See Our Impact</a>
+      <a href="#sponsors" class="btn-outline">Become a Sponsor</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <div class="stat-num" id="stat-donations" data-target="0">0</div>
+    <div class="stat-label">Donations Made</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num" id="stat-hours" data-target="0">0</div>
+    <div class="stat-label">Volunteer Hours</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num" id="stat-shelters" data-target="0">0</div>
+    <div class="stat-label">Shelters Supported</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num" id="stat-sponsors" data-target="0">0</div>
+    <div class="stat-label">Sponsors</div>
+  </div>
+</div>
+
+<!-- MISSION -->
+<section class="mission" id="mission">
+  <div class="mission-text">
+    <p class="section-label">Our Mission</p>
+    <h2 class="section-title">Bridging the gap between shelters &amp; supplies</h2>
+    <p class="section-sub">Animal shelters do incredible work — but they're often underfunded and under-supplied. Paws &amp; Purpose was born from a simple belief: we can help fill those gaps, one donation at a time.</p>
+    <a href="#donations" class="btn-primary">View Donation History</a>
+  </div>
+  <div class="mission-cards">
+    <div class="mission-card">
+      <div class="mission-icon">🛍️</div>
+      <h3>Supply Drives</h3>
+      <p>We organize regular donation drives collecting food, bedding, toys, and medical supplies for shelters in need.</p>
+    </div>
+    <div class="mission-card">
+      <div class="mission-icon">🏠</div>
+      <h3>Foster Care</h3>
+      <p>We foster animals in need — from bunnies to kittens — giving them a safe, loving home until adoption.</p>
+    </div>
+    <div class="mission-card">
+      <div class="mission-icon">🤝</div>
+      <h3>Volunteering</h3>
+      <p>Regular hands-on shelter volunteering — walking dogs, socializing cats, and supporting shelter staff.</p>
+    </div>
+    <div class="mission-card">
+      <div class="mission-icon">📣</div>
+      <h3>Awareness</h3>
+      <p>Shining a light on local shelters and the animals in their care, helping them find forever homes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DONATIONS -->
+<section class="donations-section" id="donations">
+  <p class="section-label">Donation History</p>
+  <h2 class="section-title">What we've given</h2>
+  <p class="section-sub">A running record of every donation we've made to shelters in our area — updated live from our tracker.</p>
+  <div class="donations-grid" id="donations-grid">
+    <div class="loading-msg">Loading donation records...</div>
+  </div>
+  <div class="see-more" id="see-more-wrap" style="display:none">
+    <button class="btn-outline" onclick="showAllDonations()">View All Donations</button>
+  </div>
+</section>
+
+<!-- VOLUNTEER -->
+<section class="volunteer-section" id="volunteer">
+  <div class="vol-grid">
+    <div class="vol-left">
+      <p class="section-label">Volunteer Hours</p>
+      <h2 class="section-title">Time is the greatest gift</h2>
+      <p class="section-sub">Beyond supplies, showing up in person matters. Every hour spent at the shelter is an hour an animal feels seen, loved, and cared for.</p>
+      <div class="vol-stats">
+        <div class="vol-stat">
+          <div class="vol-stat-num" id="vol-total" data-target="0">0</div>
+          <div class="vol-stat-label">Total Hours</div>
+        </div>
+        <div class="vol-stat">
+          <div class="vol-stat-num" id="vol-sessions" data-target="0">0</div>
+          <div class="vol-stat-label">Sessions</div>
+        </div>
+        <div class="vol-stat">
+          <div class="vol-stat-num" id="vol-avg" data-target="0">0</div>
+          <div class="vol-stat-label">Avg Hrs/Session</div>
+        </div>
+        <div class="vol-stat">
+          <div class="vol-stat-num" id="vol-month" data-target="0">0</div>
+          <div class="vol-stat-label">Hours This Month</div>
+        </div>
+      </div>
+    </div>
+    <div class="vol-right">
+      <div class="vol-log" id="vol-log">
+        <div style="color:rgba(255,255,255,0.4);font-size:14px;padding:20px 0">Loading volunteer log...</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOSTERS -->
+<section class="fosters-section" id="fosters">
+  <p class="section-label">Foster Animals</p>
+  <h2 class="section-title">Our temporary family</h2>
+  <p class="section-sub">These wonderful creatures have stayed with us on their journey to a forever home. Each one has stolen a piece of our hearts.</p>
+  <div class="fosters-grid" id="fosters-grid">
+    <div class="loading-msg">Loading foster animals...</div>
+  </div>
+</section>
+
+<!-- SPONSORS -->
+<section class="sponsors-section" id="sponsors">
+  <p class="section-label">Our Sponsors</p>
+  <h2 class="section-title">Thank you, champions</h2>
+  <p class="section-sub">These generous businesses and individuals make our work possible. Their support directly funds shelter donations and supplies.</p>
+  <div class="sponsors-grid" id="sponsors-grid">
+    <div class="loading-msg">Loading sponsors...</div>
+  </div>
+</section>
+
+<!-- LEADERSHIP TEAM -->
+<section class="leadership-section" id="leadership">
+  <p class="section-label">Leadership Team</p>
+  <h2 class="section-title">The heart behind the mission</h2>
+  <p class="section-sub">Meet the passionate young leader who started it all — driven by love for animals and a belief that one person really can make a difference.</p>
+
+  <div class="leader-card">
+    <!-- Circle photos column -->
+    <div class="leader-photo-col">
+      <div class="leader-circle-main">
+        <img src="images/addy-main.jpg" alt="Addy Davis with alpacas" />
+      </div>
+      <div class="leader-circle-row">
+        <div class="leader-circle-sm">
+          <img src="images/addy-bunny.png" alt="Addy fostering a rabbit" />
+        </div>
+        <div class="leader-circle-sm">
+          <img src="images/addy-dog.png" alt="Addy cuddling a puppy" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Bio column -->
+    <div class="leader-bio">
+      <div class="leader-name-block">
+        <h3 class="leader-name">Addy Davis</h3>
+        <span class="leader-title-badge">Founder &amp; Executive Director</span>
+      </div>
+
+      <p class="leader-desc">Addy is a middle school student with a heart as big as her ambitions. From fostering rabbits at the local humane society to organizing supply drives for animal shelters, she has turned her love for animals into real, tangible change in her community.</p>
+
+      <p class="leader-desc">An aspiring veterinarian, Addy believes that every animal deserves to feel safe, loved, and cared for — and she's not waiting until she grows up to do something about it. Whether she's volunteering at the shelter on weekends, tending to a foster bunny at home, or fundraising for supplies, Addy shows up with energy, compassion, and purpose.</p>
+
+      <p class="leader-desc">Beyond her passion for animals, Addy loves the outdoors and believes strongly in giving back to her local community and making an impact that ripples far beyond her own backyard.</p>
+
+      <div class="leader-tags">
+        <span class="leader-tag">🐾 Animal Advocate</span>
+        <span class="leader-tag">🩺 Future Veterinarian</span>
+        <span class="leader-tag">🌲 Outdoor Enthusiast</span>
+        <span class="leader-tag">🐰 Foster Parent</span>
+        <span class="leader-tag">💛 Community Leader</span>
+      </div>
+
+      <blockquote class="leader-quote">
+        "Every animal deserves someone in their corner. I want to be that someone."
+        <cite>— Addy Davis</cite>
+      </blockquote>
+    </div>
+  </div>
+
+  <hr class="leader-divider">
+
+  <!-- RYAN DAVIS -->
+  <div class="leader-card board-card">
+    <div class="leader-photo-col">
+      <div class="leader-circle-main">
+        <img src="images/ryan-davis.png" alt="Ryan Davis, Board Member" />
+      </div>
+    </div>
+    <div class="leader-bio">
+      <div class="leader-name-block">
+        <h3 class="leader-name">Ryan Davis</h3>
+        <span class="leader-title-badge">Board Member</span>
+      </div>
+      <p class="leader-desc">Ryan is a dedicated board member of Paws &amp; Purpose, bringing leadership, strategic thinking, and a deep commitment to the organization's mission. His support helps ensure that Addy's vision translates into lasting impact for animals and shelters throughout the community.</p>
+      <div class="leader-tags">
+        <span class="leader-tag">🤝 Board Member</span>
+        <span class="leader-tag">💛 Animal Supporter</span>
+        <span class="leader-tag">🌟 Community Champion</span>
+      </div>
+    </div>
+  </div>
+
+  <hr class="leader-divider">
+
+  <!-- GINA DAVIS -->
+  <div class="leader-card board-card">
+    <div class="leader-photo-col">
+      <div class="leader-circle-main">
+        <img src="images/gina-davis.jpg" alt="Gina Davis, Board Member" />
+      </div>
+    </div>
+    <div class="leader-bio">
+      <div class="leader-name-block">
+        <h3 class="leader-name">Gina Davis</h3>
+        <span class="leader-title-badge">Board Member</span>
+      </div>
+      <p class="leader-desc">Gina is a passionate board member of Paws &amp; Purpose who shares Addy's deep love for animals. As a hands-on supporter of the organization's foster program and community outreach, Gina brings warmth, dedication, and a genuine commitment to making life better for shelter animals everywhere.</p>
+      <div class="leader-tags">
+        <span class="leader-tag">🤝 Board Member</span>
+        <span class="leader-tag">🐰 Animal Lover</span>
+        <span class="leader-tag">🏡 Foster Supporter</span>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="contact-header">
+    <p class="section-label">Contact Us</p>
+    <h2 class="section-title">Get in touch</h2>
+    <p class="section-sub">Whether you want to donate supplies, become a sponsor, inquire about volunteering, or just say hello — Addy would love to hear from you.</p>
+  </div>
+
+  <div class="contact-inner">
+    <div class="contact-left">
+      <div class="contact-ways">
+        <div class="contact-way">
+          <div class="contact-way-icon">📧</div>
+          <div>
+            <div class="contact-way-label">Email Addy directly</div>
+            <a href="mailto:palidog30@gmail.com" class="contact-email">palidog30@gmail.com</a>
+          </div>
+        </div>
+        <div class="contact-way">
+          <div class="contact-way-icon">🐾</div>
+          <div>
+            <div class="contact-way-label">What we'd love to hear about</div>
+            <div class="contact-way-text">Supply donations · Sponsorships · Volunteering · Partnerships · General encouragement 💛</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="contact-right">
+      <div class="contact-form-card">
+        <h3 class="contact-form-title">Send a message</h3>
+        <div class="contact-field">
+          <label>Your Name</label>
+          <input type="text" id="c-name" placeholder="e.g. Jane Smith" />
+        </div>
+        <div class="contact-field">
+          <label>Your Email</label>
+          <input type="email" id="c-email" placeholder="you@example.com" />
+        </div>
+        <div class="contact-field">
+          <label>Subject</label>
+          <select id="c-subject">
+            <option>I'd like to donate supplies</option>
+            <option>I'm interested in sponsoring</option>
+            <option>I'd like to volunteer</option>
+            <option>General inquiry</option>
+            <option>Just saying hi! 👋</option>
+          </select>
+        </div>
+        <div class="contact-field">
+          <label>Message</label>
+          <textarea id="c-message" placeholder="Tell Addy what's on your mind..."></textarea>
+        </div>
+        <button class="btn-primary contact-send" onclick="sendMessage()">Send Message 🐾</button>
+        <div class="contact-confirm" id="contact-confirm">✅ Thanks! Your message will be sent to Addy — she'll get back to you soon.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Paws <span>&</span> Purpose</div>
+  <div class="footer-tagline">Made with ❤️ for animals everywhere by Addy Davis using Anthropic AI 🐾</div>
+  <div class="footer-copy">© 2025 Paws &amp; Purpose Non-Profit</div>
+</footer>
+
+<script src="js/storage.js"></script>
+<script src="js/website.js"></script>
+<script>
+function sendMessage() {
+  const name = document.getElementById('c-name').value.trim();
+  const email = document.getElementById('c-email').value.trim();
+  const subject = document.getElementById('c-subject').value;
+  const message = document.getElementById('c-message').value.trim();
+  if (!name || !email || !message) { alert('Please fill in your name, email, and message.'); return; }
+  const mailto = 'mailto:palidog30@gmail.com'
+    + '?subject=' + encodeURIComponent('[Paws & Purpose] ' + subject)
+    + '&body=' + encodeURIComponent('From: ' + name + ' (' + email + ')\n\n' + message);
+  window.location.href = mailto;
+  document.getElementById('contact-confirm').style.display = 'block';
+  document.getElementById('c-name').value = '';
+  document.getElementById('c-email').value = '';
+  document.getElementById('c-message').value = '';
+}
+</script>
+</body>
+</html>
