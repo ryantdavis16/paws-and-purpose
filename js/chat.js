@@ -1,236 +1,375 @@
-/* =============================================
-   PAWS & PURPOSE — AI Chat Widget
-   Powered by Anthropic Claude
-   ============================================= */
-
 (function() {
+  'use strict';
 
-  const systemPrompt = `You are the Paws & Purpose Assistant — a warm, friendly AI helper for Paws & Purpose, a nonprofit animal welfare organization founded by Addy Davis, a middle school student in San Jose, California.
+  // ── Config ──────────────────────────────────────────────────────────────────
+  const WORKER_URL = 'https://paws-chat.ryantdavis.workers.dev';
 
-Your personality:
-- Warm, enthusiastic, and caring — you love animals just like Addy does
-- Encouraging and positive — every interaction should feel uplifting
-- Keep responses concise, warm, and helpful
-- Don't overwhelm with info — answer what's asked
-- Always end your responses with 🐾
+  const _SYSTEM_PROMPT = `You are Addy's Helper, the friendly chat assistant for Paws & Purpose — a nonprofit animal welfare organization founded by Addy Davis, a middle school student and aspiring veterinarian in San Jose, California.
 
-About Paws & Purpose:
-- Founded by Addy Davis, a middle school student and aspiring veterinarian
+Your role is to warmly welcome visitors and answer questions about the organization.
+
+ABOUT PAWS & PURPOSE:
 - Mission: Collect and donate pet supplies to local animal shelters
-- Addy volunteers regularly at local shelters and fosters animals including rabbits
-- Partner shelters: Happy Tails Animal Shelter, Eastside Animal Rescue, Marin Humane
-- Board members: Ryan Davis and Gina Davis
-- Contact email: palidog30@gmail.com
+- Founded by: Addy Davis, a middle school student who volunteers at shelters and fosters animals (including rabbits)
+- Contact: palidog30@gmail.com
 - Website: https://ryantdavis16.github.io/paws-and-purpose/
+- Location: San Jose, California
 
-How to help visitors:
-- Answer questions about the mission and Addy's story
-- Explain how to donate pet supplies (food, bedding, toys, medical supplies)
-- Explain how to make a monetary donation
-- Help people sign up to volunteer at a shelter
-- Explain sponsorship tiers: Gold, Silver, Bronze
-- Tell people about the foster animal program
+LEADERSHIP TEAM:
+- Addy Davis — Founder & Executive Director (middle school student, aspiring vet, fosters animals including Holland Lop and Mini Rex rabbits)
+- Ryan Davis — Board Member
+- Gina Davis — Board Member
 
-When users seem interested in donating, volunteering, or sponsoring, warmly offer to capture their info.
-When collecting info ask for their name and email, then thank them and let them know Addy will follow up within 48 hours.
-If asked something you don't know, suggest they email palidog30@gmail.com.`;
+PARTNER SHELTERS:
+1. Happy Tails Animal Shelter — San Jose, CA
+2. Eastside Animal Rescue — San Jose, CA
+3. Marin Humane — Novato, CA
 
-  const COLORS = {
-    terra: '#C4622D', brown: '#3D2B1F', cream: '#FDF6EC',
-    tan: '#E8D5B7', sage: '#7A9E7E', white: '#FFFFFF', muted: '#7A6855',
-  };
+HOW TO DONATE SUPPLIES:
+- We accept: dry/wet food, treats, cat litter, bedding, blankets, toys, grooming supplies, leashes, collars, carriers
+- To donate: email palidog30@gmail.com and Addy will arrange pickup or drop-off
+- Tax acknowledgment provided for all donations
 
+HOW TO DONATE MONEY:
+- Email palidog30@gmail.com for payment instructions
+- All monetary donations go directly toward shelter supplies
+
+HOW TO VOLUNTEER:
+- Email palidog30@gmail.com with your name and availability
+- Volunteer activities: dog walking, cat socialization, rabbit care, adoption events, supply sorting, fundraising
+
+SPONSORSHIP TIERS:
+- 🥇 Gold Sponsor: highest tier, prominent website logo/name placement
+- 🥈 Silver Sponsor: name and description on website
+- 🥉 Bronze Sponsor: name featured on website
+- To sponsor: email palidog30@gmail.com
+
+FOSTER PROGRAM:
+- We foster rabbits (specialty), cats, dogs, and small animals
+- Email palidog30@gmail.com to inquire about fostering
+
+RESPONSE GUIDELINES:
+- Be warm, friendly, and encouraging — this is a youth-led nonprofit
+- Keep responses concise and helpful (2-4 sentences max unless more detail is needed)
+- Always direct people to palidog30@gmail.com for next steps
+- If you don't know something specific, direct them to email Addy
+- Addy personally responds to all emails within 48 hours
+- Use a friendly, approachable tone that matches the organization's mission`;
+
+  // ── State ────────────────────────────────────────────────────────────────────
   let chatHistory = [];
   let isOpen = false;
   let isTyping = false;
 
-  const style = document.createElement('style');
-  style.textContent = `
-    #paws-bubble {
-      position:fixed;bottom:28px;right:28px;z-index:9999;
-      width:56px;height:56px;border-radius:50%;
-      background:#C4622D;color:white;border:none;cursor:pointer;
-      font-size:24px;box-shadow:0 4px 20px rgba(196,98,45,0.4);
-      display:flex;align-items:center;justify-content:center;
-      transition:transform 0.2s,box-shadow 0.2s;
+  // ── Styles ───────────────────────────────────────────────────────────────────
+  const styles = `
+    #paws-chat-bubble {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 56px;
+      height: 56px;
+      background: #8B4513;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      box-shadow: 0 4px 16px rgba(139,69,19,0.4);
+      z-index: 9999;
+      transition: transform 0.2s, box-shadow 0.2s;
+      border: none;
     }
-    #paws-bubble:hover{transform:scale(1.08);}
-    #paws-window {
-      position:fixed;bottom:96px;right:28px;z-index:9998;
-      width:360px;max-height:560px;background:#FFFFFF;
-      border-radius:20px;border:1px solid #E8D5B7;
-      box-shadow:0 12px 48px rgba(61,43,31,0.15);
-      display:flex;flex-direction:column;overflow:hidden;
-      transform:scale(0.95) translateY(10px);opacity:0;pointer-events:none;
-      transition:transform 0.25s ease,opacity 0.25s ease;
-      font-family:'DM Sans',sans-serif;
+    #paws-chat-bubble:hover {
+      transform: scale(1.08);
+      box-shadow: 0 6px 20px rgba(139,69,19,0.5);
     }
-    #paws-window.open{transform:scale(1) translateY(0);opacity:1;pointer-events:all;}
-    #paws-header{background:#3D2B1F;padding:14px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0;}
-    #paws-avatar{width:36px;height:36px;border-radius:50%;background:#C4622D;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
-    #paws-header-info{flex:1;}
-    #paws-header-name{font-size:13px;font-weight:500;color:white;margin:0;}
-    #paws-header-status{font-size:11px;color:rgba(255,255,255,0.6);margin:0;display:flex;align-items:center;gap:4px;}
-    .paws-dot{width:6px;height:6px;border-radius:50%;background:#7A9E7E;display:inline-block;}
-    #paws-close{background:none;border:none;color:rgba(255,255,255,0.6);cursor:pointer;font-size:16px;padding:4px;}
-    #paws-close:hover{color:white;}
-    #paws-messages{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px;background:#FDF6EC;}
-    #paws-messages::-webkit-scrollbar{width:4px;}
-    #paws-messages::-webkit-scrollbar-thumb{background:#E8D5B7;border-radius:2px;}
-    .pmsg{display:flex;gap:8px;align-items:flex-end;animation:pmsgIn 0.2s ease;}
-    @keyframes pmsgIn{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);}}
-    .pmsg.user{flex-direction:row-reverse;}
-    .pmsg-av{width:26px;height:26px;border-radius:50%;background:#C4622D;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
-    .pmsg.user .pmsg-av{background:#E8D5B7;color:#3D2B1F;font-size:10px;font-weight:600;}
-    .pmsg-bub{max-width:80%;padding:9px 12px;border-radius:14px;font-size:13px;line-height:1.55;color:#3D2B1F;}
-    .pmsg.bot .pmsg-bub{background:#FFFFFF;border:1px solid #E8D5B7;border-bottom-left-radius:3px;}
-    .pmsg.user .pmsg-bub{background:#C4622D;color:white;border-bottom-right-radius:3px;}
-    .pmsg-typing{display:flex;gap:4px;align-items:center;padding:10px 12px;}
-    .pmsg-tdot{width:6px;height:6px;border-radius:50%;background:#7A6855;animation:ptdot 1.2s infinite;}
-    .pmsg-tdot:nth-child(2){animation-delay:0.2s;}
-    .pmsg-tdot:nth-child(3){animation-delay:0.4s;}
-    @keyframes ptdot{0%,80%,100%{transform:scale(0.7);opacity:0.4;}40%{transform:scale(1);opacity:1;}}
-    #paws-input-area{padding:10px 12px;border-top:1px solid #E8D5B7;background:#FFFFFF;display:flex;gap:8px;align-items:flex-end;flex-shrink:0;}
-    #paws-input{flex:1;border:1px solid #E8D5B7;border-radius:18px;padding:8px 13px;font-size:13px;font-family:'DM Sans',sans-serif;color:#3D2B1F;background:#FDF6EC;outline:none;resize:none;max-height:90px;line-height:1.4;transition:border 0.2s;}
-    #paws-input:focus{border-color:#C4622D;}
-    #paws-input::placeholder{color:#7A6855;opacity:0.7;}
-    #paws-send{width:34px;height:34px;border-radius:50%;background:#C4622D;color:white;border:none;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background 0.2s,transform 0.15s;}
-    #paws-send:hover{background:#a8521f;transform:scale(1.05);}
-    #paws-send:disabled{opacity:0.4;cursor:not-allowed;transform:none;}
-    @media(max-width:480px){#paws-window{width:calc(100vw - 24px);right:12px;bottom:84px;}#paws-bubble{right:12px;bottom:12px;}}
+    #paws-chat-window {
+      position: fixed;
+      bottom: 92px;
+      right: 24px;
+      width: 340px;
+      max-height: 480px;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+      display: flex;
+      flex-direction: column;
+      z-index: 9998;
+      overflow: hidden;
+      transition: opacity 0.2s, transform 0.2s;
+      font-family: 'Georgia', serif;
+    }
+    #paws-chat-window.hidden {
+      opacity: 0;
+      transform: translateY(12px) scale(0.97);
+      pointer-events: none;
+    }
+    #paws-chat-header {
+      background: #8B4513;
+      color: #fff;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-radius: 16px 16px 0 0;
+    }
+    #paws-chat-header .header-icon { font-size: 22px; }
+    #paws-chat-header .header-text { flex: 1; }
+    #paws-chat-header .header-title { font-weight: bold; font-size: 15px; letter-spacing: 0.3px; }
+    #paws-chat-header .header-sub { font-size: 11px; opacity: 0.85; margin-top: 1px; }
+    #paws-chat-close {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 0;
+      line-height: 1;
+      opacity: 0.8;
+    }
+    #paws-chat-close:hover { opacity: 1; }
+    #paws-chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px 14px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: #fdf8f3;
+    }
+    .paws-msg {
+      max-width: 85%;
+      padding: 9px 13px;
+      border-radius: 14px;
+      font-size: 13.5px;
+      line-height: 1.5;
+    }
+    .paws-msg.bot {
+      background: #f0e6d6;
+      color: #3b1f0a;
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+    }
+    .paws-msg.user {
+      background: #8B4513;
+      color: #fff;
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+    .paws-typing {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      padding: 10px 14px;
+      background: #f0e6d6;
+      border-radius: 14px;
+      border-bottom-left-radius: 4px;
+      align-self: flex-start;
+    }
+    .paws-typing span {
+      width: 7px;
+      height: 7px;
+      background: #8B4513;
+      border-radius: 50%;
+      animation: pawsBounce 1.2s infinite;
+      opacity: 0.6;
+    }
+    .paws-typing span:nth-child(2) { animation-delay: 0.2s; }
+    .paws-typing span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes pawsBounce {
+      0%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-6px); }
+    }
+    #paws-chat-input-row {
+      display: flex;
+      gap: 8px;
+      padding: 10px 12px;
+      border-top: 1px solid #e8d8c4;
+      background: #fff;
+    }
+    #paws-chat-input {
+      flex: 1;
+      border: 1px solid #c9aa84;
+      border-radius: 20px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-family: inherit;
+      outline: none;
+      background: #fdf8f3;
+      color: #3b1f0a;
+    }
+    #paws-chat-input:focus { border-color: #8B4513; }
+    #paws-chat-send {
+      background: #8B4513;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+      flex-shrink: 0;
+    }
+    #paws-chat-send:hover { background: #6b3410; }
+    #paws-chat-send:disabled { background: #c9aa84; cursor: not-allowed; }
+    @media (max-width: 400px) {
+      #paws-chat-window { width: calc(100vw - 20px); right: 10px; bottom: 80px; }
+    }
   `;
-  document.head.appendChild(style);
 
-  document.body.insertAdjacentHTML('beforeend', `
-    <button id="paws-bubble" aria-label="Chat with Paws and Purpose Assistant">🐾</button>
-    <div id="paws-window" role="dialog" aria-label="Paws and Purpose Chat">
-      <div id="paws-header">
-        <div id="paws-avatar">🐾</div>
-        <div id="paws-header-info">
-          <p id="paws-header-name">Paws &amp; Purpose Assistant</p>
-          <p id="paws-header-status"><span class="paws-dot"></span> Online now</p>
+  // ── DOM setup ─────────────────────────────────────────────────────────────────
+  function init() {
+    // Inject styles
+    const styleEl = document.createElement('style');
+    styleEl.textContent = styles;
+    document.head.appendChild(styleEl);
+
+    // Chat bubble
+    const bubble = document.createElement('button');
+    bubble.id = 'paws-chat-bubble';
+    bubble.innerHTML = '🐾';
+    bubble.setAttribute('aria-label', 'Open chat');
+    bubble.addEventListener('click', toggleChat);
+    document.body.appendChild(bubble);
+
+    // Chat window
+    const win = document.createElement('div');
+    win.id = 'paws-chat-window';
+    win.classList.add('hidden');
+    win.innerHTML = `
+      <div id="paws-chat-header">
+        <span class="header-icon">🐾</span>
+        <div class="header-text">
+          <div class="header-title">Addy's Helper</div>
+          <div class="header-sub">Paws &amp; Purpose</div>
         </div>
-        <button id="paws-close" aria-label="Close chat">✕</button>
+        <button id="paws-chat-close" aria-label="Close chat">✕</button>
       </div>
-      <div id="paws-messages"></div>
-      <div id="paws-input-area">
-        <textarea id="paws-input" placeholder="Ask me about Paws &amp; Purpose..." rows="1"></textarea>
-        <button id="paws-send" aria-label="Send">&#10148;</button>
+      <div id="paws-chat-messages"></div>
+      <div id="paws-chat-input-row">
+        <input id="paws-chat-input" type="text" placeholder="Ask us anything…" maxlength="500" autocomplete="off" />
+        <button id="paws-chat-send" aria-label="Send">➤</button>
       </div>
-    </div>
-  `);
+    `;
+    document.body.appendChild(win);
 
-  const bubble  = document.getElementById('paws-bubble');
-  const win     = document.getElementById('paws-window');
-  const msgs    = document.getElementById('paws-messages');
-  const input   = document.getElementById('paws-input');
-  const sendBtn = document.getElementById('paws-send');
-
-  function toggleChat() {
-    isOpen = !isOpen;
-    win.classList.toggle('open', isOpen);
-    bubble.textContent = isOpen ? '\u2715' : '\uD83D\uDC3E';
-    bubble.style.fontSize = isOpen ? '16px' : '24px';
-    if (isOpen && chatHistory.length === 0) showWelcome();
-    if (isOpen) setTimeout(() => input.focus(), 300);
+    // Event listeners
+    document.getElementById('paws-chat-close').addEventListener('click', toggleChat);
+    document.getElementById('paws-chat-send').addEventListener('click', sendMessage);
+    document.getElementById('paws-chat-input').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+    });
   }
 
-  bubble.addEventListener('click', toggleChat);
-  document.getElementById('paws-close').addEventListener('click', toggleChat);
+  // ── Toggle ────────────────────────────────────────────────────────────────────
+  function toggleChat() {
+    isOpen = !isOpen;
+    const win = document.getElementById('paws-chat-window');
+    if (isOpen) {
+      win.classList.remove('hidden');
+      document.getElementById('paws-chat-input').focus();
+      if (chatHistory.length === 0) {
+        addMessage('bot', 'Hi there! 🐾 I\'m Addy\'s Helper for Paws & Purpose. I can answer questions about donating supplies, volunteering, sponsorship, or fostering animals. How can I help you today?');
+      }
+    } else {
+      win.classList.add('hidden');
+    }
+  }
 
-  function addMsg(role, text) {
-    const wrap = document.createElement('div');
-    wrap.className = 'pmsg ' + role;
-    const av = document.createElement('div');
-    av.className = 'pmsg-av';
-    av.textContent = role === 'bot' ? '\uD83D\uDC3E' : 'You';
-    const bub = document.createElement('div');
-    bub.className = 'pmsg-bub';
-    bub.textContent = text;
-    wrap.appendChild(av);
-    wrap.appendChild(bub);
-    msgs.appendChild(wrap);
-    msgs.scrollTop = msgs.scrollHeight;
+  // ── Messages ──────────────────────────────────────────────────────────────────
+  function addMessage(role, text) {
+    const messages = document.getElementById('paws-chat-messages');
+    const div = document.createElement('div');
+    div.className = 'paws-msg ' + role;
+    div.textContent = text;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+
+    if (role === 'user') {
+      chatHistory.push({ role: 'user', content: text });
+    } else {
+      chatHistory.push({ role: 'assistant', content: text });
+    }
+    return div;
   }
 
   function showTyping() {
-    const wrap = document.createElement('div');
-    wrap.className = 'pmsg bot';
-    wrap.id = 'paws-typing';
-    const av = document.createElement('div');
-    av.className = 'pmsg-av';
-    av.textContent = '\uD83D\uDC3E';
-    const bub = document.createElement('div');
-    bub.className = 'pmsg-bub pmsg-typing';
-    bub.innerHTML = '<div class="pmsg-tdot"></div><div class="pmsg-tdot"></div><div class="pmsg-tdot"></div>';
-    wrap.appendChild(av);
-    wrap.appendChild(bub);
-    msgs.appendChild(wrap);
-    msgs.scrollTop = msgs.scrollHeight;
+    const messages = document.getElementById('paws-chat-messages');
+    const div = document.createElement('div');
+    div.className = 'paws-typing';
+    div.id = 'paws-typing-indicator';
+    div.innerHTML = '<span></span><span></span><span></span>';
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
   }
 
-  function removeTyping() {
-    const t = document.getElementById('paws-typing');
-    if (t) t.remove();
+  function hideTyping() {
+    const el = document.getElementById('paws-typing-indicator');
+    if (el) el.remove();
   }
 
-  function showWelcome() {
-    setTimeout(() => {
-      addMsg('bot', "Hi there! I'm the Paws & Purpose Assistant. I can help you learn about our mission, donate supplies, volunteer, or become a sponsor. What can I help you with today? \uD83D\uDC3E");
-    }, 400);
-  }
-
-  sendBtn.addEventListener('click', handleSend);
-  input.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
-  });
-  input.addEventListener('input', () => {
-    input.style.height = 'auto';
-    input.style.height = Math.min(input.scrollHeight, 90) + 'px';
-  });
-
-  async function handleSend() {
+  // ── API call ──────────────────────────────────────────────────────────────────
+  async function sendMessage() {
     if (isTyping) return;
+    const input = document.getElementById('paws-chat-input');
     const text = input.value.trim();
     if (!text) return;
 
     input.value = '';
-    input.style.height = 'auto';
-    addMsg('user', text);
-    chatHistory.push({ role: 'user', content: text });
+    addMessage('user', text);
 
     isTyping = true;
-    sendBtn.disabled = true;
+    document.getElementById('paws-chat-send').disabled = true;
     showTyping();
 
     try {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
+      const response = await fetch(WORKER_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-20250514',
-          max_tokens: 1000,
-          system: systemPrompt,
-          messages: chatHistory.slice(-10).map(m => ({ role: m.role, content: m.content }))
+          messages: chatHistory.slice(-10).filter(m => m.role === 'user' || m.role === 'assistant').map(m => ({
+            role: m.role,
+            content: m.content
+          }))
         })
       });
 
+      if (!response.ok) {
+        throw new Error('API error: ' + response.status);
+      }
+
       const data = await response.json();
-      const reply = data.content?.[0]?.text || "I'm sorry, something went wrong. Please email palidog30@gmail.com for help! \uD83D\uDC3E";
-      chatHistory.push({ role: 'assistant', content: reply });
-      removeTyping();
-      addMsg('bot', reply);
+      const reply = data.content && data.content[0] && data.content[0].text
+        ? data.content[0].text
+        : 'I\'m sorry, I couldn\'t get a response. Please email palidog30@gmail.com and Addy will help you! 🐾';
 
-    } catch(e) {
-      removeTyping();
-      addMsg('bot', "Sorry, I'm having trouble connecting right now. Please email palidog30@gmail.com and Addy will get back to you within 48 hours! \uD83D\uDC3E");
+      hideTyping();
+      addMessage('bot', reply);
+
+    } catch (err) {
+      console.error('Paws chat error:', err);
+      hideTyping();
+      addMessage('bot', 'Sorry, I\'m having trouble connecting right now. Please email palidog30@gmail.com and Addy will get back to you within 48 hours! 🐾');
+    } finally {
+      isTyping = false;
+      document.getElementById('paws-chat-send').disabled = false;
+      document.getElementById('paws-chat-input').focus();
     }
+  }
 
-    isTyping = false;
-    sendBtn.disabled = false;
-    input.focus();
+  // ── Boot ──────────────────────────────────────────────────────────────────────
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
   }
 
 })();
